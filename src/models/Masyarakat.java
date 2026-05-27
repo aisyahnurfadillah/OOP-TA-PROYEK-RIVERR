@@ -47,7 +47,7 @@ public class Masyarakat extends Pengguna {
         super.validate(); // cek nama & password dari Pengguna dulu
         if (email == null || !email.contains("@"))
             throw new IllegalArgumentException(" Format Email tidak valid.");
-        if (alamat == null || email.isBlank())
+        if (alamat == null || alamat.isBlank())
             throw new IllegalArgumentException("alamat tidak boleh kosong.");
         return true;
     }
