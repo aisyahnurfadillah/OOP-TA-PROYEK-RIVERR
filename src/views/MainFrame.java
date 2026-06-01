@@ -8,24 +8,24 @@ import java.awt.*;
  * Window utama aplikasi RiverR.
  *
  * KONSEP OOP:
- *  - Inheritance  : extends JFrame
- *  - Polymorphism : instanceof Refreshable pada loop Component
- *  - Static const : nama panel sebagai konstanta
+ * - Inheritance : extends JFrame
+ * - Polymorphism : instanceof Refreshable pada loop Component
+ * - Static const : nama panel sebagai konstanta
  *
  * @author Stipwn (Role 3 - UI & Robustness Engineer)
  */
 public class MainFrame extends JFrame {
 
     private final CardLayout cardLayout = new CardLayout();
-    private final JPanel     container  = new JPanel(cardLayout);
+    private final JPanel container = new JPanel(cardLayout);
 
-    public static final String LOGIN       = "LOGIN";
-    public static final String REGISTER    = "REGISTER";
+    public static final String LOGIN = "LOGIN";
+    public static final String REGISTER = "REGISTER";
     public static final String DASHBOARD_M = "DASHBOARD_MASYARAKAT";
     public static final String DASHBOARD_A = "DASHBOARD_ADMIN";
-    public static final String LAPORAN     = "LAPORAN";
-    public static final String VALIDASI    = "VALIDASI";
-    public static final String TINDAK      = "TINDAK_LANJUT";
+    public static final String LAPORAN = "LAPORAN";
+    public static final String VALIDASI = "VALIDASI";
+    public static final String TINDAK = "TINDAK_LANJUT";
 
     public MainFrame() {
         setTitle("RiverR – Sistem Pelaporan Pencemaran Sungai");
@@ -34,13 +34,13 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        container.add(new LoginPanel(this),               LOGIN);
-        container.add(new RegisterPanel(this),            REGISTER);
+        container.add(new LoginPanel(this), LOGIN);
+        container.add(new RegisterPanel(this), REGISTER);
         container.add(new DashboardMasyarakatPanel(this), DASHBOARD_M);
-        container.add(new DashboardAdminPanel(this),      DASHBOARD_A);
-        container.add(new LaporanPanel(this),             LAPORAN);
-        container.add(new ValidasiPanel(this),            VALIDASI);
-        container.add(new TindakLanjutPanel(this),        TINDAK);
+        container.add(new DashboardAdminPanel(this), DASHBOARD_A);
+        container.add(new LaporanPanel(this), LAPORAN);
+        container.add(new ValidasiPanel(this), VALIDASI);
+        container.add(new TindakLanjutPanel(this), TINDAK);
 
         add(container);
         showPanel(LOGIN);
@@ -49,7 +49,8 @@ public class MainFrame extends JFrame {
     public void showPanel(String name) {
         // POLYMORPHISM: cek instanceof Refreshable sebelum panggil onShow()
         for (Component c : container.getComponents()) {
-            if (c instanceof Refreshable r) r.onShow();
+            if (c instanceof Refreshable r)
+                r.onShow();
         }
         cardLayout.show(container, name);
     }
@@ -62,7 +63,8 @@ public class MainFrame extends JFrame {
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
             new MainFrame().setVisible(true);
         });
     }

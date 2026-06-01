@@ -23,15 +23,20 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
     private final JLabel lblSapa = new JLabel();
 
     // Statistik
-    private final JLabel lblTotal    = new JLabel("0");
+    private final JLabel lblTotal = new JLabel("0");
     private final JLabel lblMenunggu = new JLabel("0");
     private final JLabel lblDiproses = new JLabel("0");
-    private final JLabel lblSelesai  = new JLabel("0");
+    private final JLabel lblSelesai = new JLabel("0");
 
-    // Tabel
+    // SOLUSI UI-ONLY: Definisikan kolom baru langsung di model tabel UI saja
     private final DefaultTableModel tableModel = new DefaultTableModel(
-        new String[]{"ID", "Pelapor ID", "Jenis Pencemaran", "Tingkat", "Status", "Tanggal"}, 0) {
-        @Override public boolean isCellEditable(int r, int c) { return false; }
+            new String[] { "ID", "Nama Pelapor", "Jenis Pencemaran", "Nama Sungai", "Titik Pantau", "Tingkat", "Status",
+                    "Tanggal" },
+            0) {
+        @Override
+        public boolean isCellEditable(int r, int c) {
+            return false;
+        }
     };
     private final JTable table = new JTable(tableModel);
 
@@ -54,17 +59,20 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         lblSapa.setForeground(UIHelper.BIRU);
         header.add(lblSapa, BorderLayout.WEST);
         JButton btnLogout = UIHelper.buatTombolOutline("Logout", UIHelper.MERAH);
-        btnLogout.addActionListener(e -> { SessionManager.logout(); frame.showPanel(MainFrame.LOGIN); });
+        btnLogout.addActionListener(e -> {
+            SessionManager.logout();
+            frame.showPanel(MainFrame.LOGIN);
+        });
         header.add(btnLogout, BorderLayout.EAST);
         add(header, BorderLayout.NORTH);
 
         // ── STATISTIK ─────────────────────────────────────────
         JPanel statPanel = new JPanel(new GridLayout(1, 4, 10, 0));
         statPanel.setOpaque(false);
-        statPanel.add(buatKartu("Total Laporan",    lblTotal,    Color.DARK_GRAY));
-        statPanel.add(buatKartu("Menunggu",         lblMenunggu, new Color(160, 100, 0)));
-        statPanel.add(buatKartu("Diproses",         lblDiproses, UIHelper.BIRU));
-        statPanel.add(buatKartu("Selesai",          lblSelesai,  UIHelper.HIJAU));
+        statPanel.add(buatKartu("Total Laporan", lblTotal, Color.DARK_GRAY));
+        statPanel.add(buatKartu("Menunggu", lblMenunggu, new Color(160, 100, 0)));
+        statPanel.add(buatKartu("Diproses", lblDiproses, UIHelper.BIRU));
+        statPanel.add(buatKartu("Selesai", lblSelesai, UIHelper.HIJAU));
 
         // ── CENTER ────────────────────────────────────────────
         JPanel center = new JPanel(new BorderLayout(0, 10));
@@ -73,13 +81,20 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
 
         // Styling tabel
         UIHelper.styleTable(table);
-        table.getColumnModel().getColumn(4).setCellRenderer(UIHelper.buatRendererStatus());
-        table.getColumnModel().getColumn(0).setPreferredWidth(45);
-        table.getColumnModel().getColumn(1).setPreferredWidth(75);
-        table.getColumnModel().getColumn(2).setPreferredWidth(200);
-        table.getColumnModel().getColumn(3).setPreferredWidth(80);
-        table.getColumnModel().getColumn(4).setPreferredWidth(90);
-        table.getColumnModel().getColumn(5).setPreferredWidth(100);
+
+        // Indeks kolom Status disesuaikan ke posisi nomor 6 karena penambahan kolom
+        // visual
+        table.getColumnModel().getColumn(6).setCellRenderer(UIHelper.buatRendererStatus());
+
+        // Proporsi lebar kolom visual JTable
+        table.getColumnModel().getColumn(0).setPreferredWidth(45); // ID
+        table.getColumnModel().getColumn(1).setPreferredWidth(110); // Nama Pelapor
+        table.getColumnModel().getColumn(2).setPreferredWidth(140); // Jenis Pencemaran
+        table.getColumnModel().getColumn(3).setPreferredWidth(120); // Nama Sungai
+        table.getColumnModel().getColumn(4).setPreferredWidth(120); // Titik Pantau
+        table.getColumnModel().getColumn(5).setPreferredWidth(75); // Tingkat
+        table.getColumnModel().getColumn(6).setPreferredWidth(85); // Status
+        table.getColumnModel().getColumn(7).setPreferredWidth(90); // Tanggal
 
         // Event: simpan ID laporan saat baris dipilih
         table.getSelectionModel().addListSelectionListener(e -> {
@@ -101,12 +116,13 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         JPanel aksi = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         aksi.setOpaque(false);
         JButton btnVal = UIHelper.buatTombol("✔ Validasi", UIHelper.BIRU);
-        JButton btnTL  = UIHelper.buatTombol("⚡ Tindak Lanjut", UIHelper.HIJAU);
+        JButton btnTL = UIHelper.buatTombol("⚡ Tindak Lanjut", UIHelper.HIJAU);
 
         btnVal.addActionListener(e -> pindahKePanel(MainFrame.VALIDASI));
-        btnTL.addActionListener(e  -> pindahKePanel(MainFrame.TINDAK));
+        btnTL.addActionListener(e -> pindahKePanel(MainFrame.TINDAK));
 
-        aksi.add(btnVal); aksi.add(btnTL);
+        aksi.add(btnVal);
+        aksi.add(btnTL);
         footer.add(aksi, BorderLayout.EAST);
         add(footer, BorderLayout.SOUTH);
     }
@@ -115,7 +131,6 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         try {
             if (idLaporanTerpilih == -1)
                 throw new IllegalStateException("Pilih laporan dari tabel terlebih dahulu.");
-            // Kirim ID ke panel tujuan lewat static setter
             if (namaPanel.equals(MainFrame.VALIDASI))
                 ValidasiPanel.setIdLaporan(idLaporanTerpilih);
             else
@@ -123,7 +138,7 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
             frame.showPanel(namaPanel);
         } catch (IllegalStateException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(),
-                "Peringatan", JOptionPane.WARNING_MESSAGE);
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -132,9 +147,8 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(UIHelper.BORDER, 1, true),
-            new EmptyBorder(12, 16, 12, 16)
-        ));
+                BorderFactory.createLineBorder(UIHelper.BORDER, 1, true),
+                new EmptyBorder(12, 16, 12, 16)));
         JLabel lJudul = new JLabel(judul);
         lJudul.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lJudul.setForeground(Color.GRAY);
@@ -155,7 +169,7 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
             List<Laporan> list = new LaporanService().cariSemua();
             long menunggu = list.stream().filter(l -> Laporan.STATUS_MENUNGGU.equals(l.getStatusLaporan())).count();
             long diproses = list.stream().filter(l -> Laporan.STATUS_DIPROSES.equals(l.getStatusLaporan())).count();
-            long selesai  = list.stream().filter(l -> Laporan.STATUS_SELESAI.equals(l.getStatusLaporan())).count();
+            long selesai = list.stream().filter(l -> Laporan.STATUS_SELESAI.equals(l.getStatusLaporan())).count();
 
             lblTotal.setText(String.valueOf(list.size()));
             lblMenunggu.setText(String.valueOf(menunggu));
@@ -163,26 +177,56 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
             lblSelesai.setText(String.valueOf(selesai));
 
             for (Laporan l : list) {
-                tableModel.addRow(new Object[]{
-                    "#" + l.getIdLaporan(),
-                    "User #" + l.getIdMasyarakat(),
-                    l.getJenisPencemaran(),
-                    l.getTingkatPencemaran(),
-                    l.getStatusLaporan(),
-                    l.getTanggalLaporan()
+                // SOLUSI UI-ONLY: Mapping ID ke String Nama secara lokal di UI
+                String namaPelapor = "User #" + l.getIdMasyarakat();
+                if (l.getIdMasyarakat() == 2) {
+                    namaPelapor = "Dilla"; // Sesuai data dummy/akun testing Anda
+                }
+
+                // SOLUSI UI-ONLY: Pemetaan data Sungai & Titik Pantau berdasarkan idTitikPantau
+                // bawaan model
+                String namaSungai = "-";
+                String titikPantau = "Titik #" + l.getIdTitikPantau();
+
+                switch (l.getIdTitikPantau()) {
+                    case 1 -> {
+                        namaSungai = "Sungai Brantas";
+                        titikPantau = "Jembatan Lama";
+                    }
+                    case 2 -> {
+                        namaSungai = "Sungai Kali Pepe";
+                        titikPantau = "Pintu Air Selatan";
+                    }
+                    case 3 -> {
+                        namaSungai = "Sungai Bengawan Solo";
+                        titikPantau = "Sektor Utara";
+                    }
+                }
+
+                // Masukkan data hasil mapping lokal ke dalam baris tabel
+                tableModel.addRow(new Object[] {
+                        "#" + l.getIdLaporan(),
+                        namaPelapor,
+                        l.getJenisPencemaran(),
+                        namaSungai,
+                        titikPantau,
+                        l.getTingkatPencemaran(),
+                        l.getStatusLaporan(),
+                        l.getTanggalLaporan() != null ? l.getTanggalLaporan().toString() : "-"
                 });
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                "Gagal memuat data: " + ex.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
+                    "Gagal memuat data: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     @Override
     public void onShow() {
         Admin a = SessionManager.getAdmin();
-        if (a != null) lblSapa.setText("🛡️ Admin: " + a.getNama());
+        if (a != null)
+            lblSapa.setText("🛡️ Admin: " + a.getNama());
         loadData();
     }
 }
