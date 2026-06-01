@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Main",
+      "projectName": "OOP-TA-PROYEK-RIVERR_9a532d2b"
+    },
+    {
+      "type": "java",
+      "name": "Run RiverR",
+      "request": "launch",
+      "mainClass": "Main",
+      "projectName": "riverr-oop"
+    }
+  ]
+}
