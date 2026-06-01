@@ -1,6 +1,15 @@
-# 🌊 River - Sistem Pelaporan Pencemaran Sungai
+# 🌊 Riverr - Sistem Pelaporan Pencemaran Sungai
 
-Aplikasi manajemen dan pelaporan pencemaran sungai berbasis *Object-Oriented Programming* (OOP) menggunakan penyimpanan data *Java Collections Framework* di dalam memori (*in-memory*).
+Aplikasi manajemen dan pelaporan pencemaran sungai berbasis *Object-Oriented Programming* (OOP) menggunakan *Java Swing* untuk antarmuka pengguna dan penyimpanan data *Java Collections Framework* di dalam memori (*in-memory*).
+
+---
+
+## 📋 Deskripsi Aplikasi
+**Riverr** adalah sistem pelaporan pencemaran sungai berbasis Java Swing. Masyarakat dapat melaporkan kejadian pencemaran, sedangkan Admin memvalidasi serta menindaklanjuti setiap laporan yang masuk.
+
+### 🔄 Alur Sistem
+1. **Masyarakat:** Daftar ➔ Login ➔ Buat Laporan
+2. **Admin:** Validasi Laporan ➔ Tindak Lanjut *(Jika Valid)* ➔ Laporan **SELESAI**
 
 ---
 
@@ -10,10 +19,10 @@ Berikut adalah rincian kontribusi, tanggung jawab, dan bukti pengerjaan objektif
 
 | NIM & Nama | Peran Utama | Rincian Tugas & Fokus | Bukti Objektif di Git |
 | :--- | :--- | :--- | :--- |
-| 254311027<br>Bangkit Cahya Linuwih | Role 1: Class Architect<br>*(Fokus: Struktur OOP)* | • Membuat Class Diagram di draw.io.<br>• Mendefinisikan *Superclass*, *Subclass*, *Interface* (IManageable, IAuthenticatable), dan *Abstract Class*.<br>• Memastikan implementasi *Encapsulation* (Getter/Setter) diterapkan dengan benar pada model. | Pembuat file model / entitas utama.<br>*(Contoh: Pengguna.java, Laporan.java, Masyarakat.java, Admin.java)* |
-| 254311007<br>SILFINA NUR FADILAH | ⚙️ Role 2: Data & Logic Engineer<br>*(Fokus: Collections & CRUD)* | • Mengimplementasikan *ArrayList* atau *List* sebagai media penyimpanan data laporan dan pengguna di memori.<br>• Membuat fungsi logika *Create, Read, Update, Delete* (CRUD) untuk memanipulasi objek pelaporan. | Pembuat file Controller atau Service.<br>*(Contoh: PelaporanService.java, MasyarakatService.java)* |
-| 254311015<br>ABDUL AZIZ MUSHTHOFA | 🛡️ Role 3: UI & Robustness Engineer<br>*(Fokus: Debugging & Form)* | • Merancang menu interaksi aplikasi CLI (Console / *Scanner*) untuk pelapor dan admin.<br>• Mengimplementasikan blok *try-catch* pada setiap input user.<br>• Melakukan validasi data input agar aplikasi tidak mudah *crash*. | Pembuat file View / Main Menu dan penanggung jawab blok *Exception Handling* (Main.java). |
-| 254311001<br>AISYAH NUR FADILLAH | 🧪 Role 4: Quality Assurance & Repo Master<br>*(Fokus: Testing & Git)* | • Mengelola *merging branch* ke develop di Git dan menyelesaikan jika terjadi *code conflict*.<br>• Menulis skenario pengujian menggunakan *Unit Testing* (JUnit).<br>• Menyusun dokumentasi teknis dan konfigurasi akhir README.md. | Pembuat file Test *(Contoh: PelaporanTest.java)*, grafik aktivitas *merge* di GitHub, dan penulis utama README.md. |
+| **254311027**<br>Bangkit Cahya Linuwih | 🏗️ Role 1: Class Architect<br>*(Fokus: Struktur OOP)* | • Membuat Class Diagram di draw.io.<br>• Mendefinisikan *Superclass*, *Subclass*, *Interface* (`IManageable`, `IAuthenticatable`), dan *Abstract Class*.<br>• Memastikan implementasi *Encapsulation* (Getter/Setter) diterapkan dengan benar pada model. | Pembuat file model / entitas utama.<br>*(Contoh: Pengguna.java, Laporan.java, Masyarakat.java, Admin.java)* |
+| **254311007**<br>SILFINA NUR FADILAH | ⚙️ Role 2: Data & Logic Engineer<br>*(Fokus: Collections & CRUD)* | • Mengimplementasikan *ArrayList* atau *List* sebagai media penyimpanan data laporan dan pengguna di memori.<br>• Membuat fungsi logika *Create, Read, Update, Delete* (CRUD) untuk memanipulasi objek pelaporan. | Pembuat file Controller atau Service.<br>*(Contoh: PelaporanService.java, MasyarakatService.java)* |
+| **254311015**<br>ABDUL AZIZ MUSHTHOFA | 🛡️ Role 3: UI & Robustness Engineer<br>*(Fokus: Debugging & Form)* | • Merancang menu interaksi aplikasi menggunakan komponen grafis GUI (*Java Swing*).<br>• Mengimplementasikan blok *try-catch* pada setiap input user di komponen View.<br>• Melakukan validasi data input agar aplikasi tidak mudah *crash*. | Pembuat file View / GUI Panel dan penanggung jawab blok *Exception Handling* (MainFrame.java, Panel files). |
+| **254311001**<br>AISYAH NUR FADILLAH | 🧪 Role 4: Quality Assurance & Repo Master<br>*(Fokus: Testing & Git)* | • Mengelola *merging branch* ke develop di Git dan menyelesaikan jika terjadi *code conflict*.<br>• Menulis skenario pengujian menggunakan *Unit Testing* (JUnit).<br>• Menyusun dokumentasi teknis dan konfigurasi akhir README.md. | Pembuat file Test *(Contoh: PelaporanTest.java)*, grafik aktivitas *merge* di GitHub, dan penulis utama README.md. |
 
 ---
 
@@ -23,119 +32,97 @@ Berikut adalah rancangan struktur kelas aplikasi Riverr yang didesain menggunaka
 
 ![Class Diagram River](docs/class-diagram.png)
 
-### Diagram Relasi Class
+----
+
+## 🏛️ Arsitektur & Konsep OOP Sistem
+
+### 1. Hubungan Kelas (Inheritance & Abstract Class)
+* **Superclass:** `Pengguna` (Bersifat *abstract*, tidak dapat di-instansiasi langsung).
+* **Subclass:** 
+  * `Admin` (Login menggunakan *username*).
+  * `Masyarakat` (Login menggunakan *email*).
+* **Pewarisan Atribut:** Kelas `Admin` dan `Masyarakat` mewarisi seluruh *fields* utama dari `Pengguna`, yaitu: `id`, `nama`, `password`, dan `statusAkun`.
+
+---
+
+### 2. Kontrak Sistem (Interfaces)
+
+Aplikasi ini menerapkan beberapa *interface* untuk memastikan standarisasi kode:
+
+| Interface | Implementasi | Deskripsi / Kontrak |
+| :--- | :--- | :--- |
+| **`IManageable<T, ID>`** | Semua kelas *Service* | Kontrak operasi CRUD standar secara generik. |
+| **`IAuthenticatable`** | `AdminService` & `MasyarakatService` | Kontrak untuk menangani mekanisme sistem login. |
+| **`IValidatable`** | Semua kelas *Model* | Kontrak untuk validasi data mandiri sebelum diproses. |
+| **`Refreshable`** | Semua kelas *Panel View* | Kontrak untuk pembaruan data pada UI secara otomatis. |
+
+---
+
+### 3. Enkapsulasi (Encapsulation)
+> 🔒 **Prinsip Keamanan Data:** Semua *fields* atau atribut pada kelas model diatur dengan hak akses `private` atau `protected`. Data tersebut tidak dapat diakses secara langsung dari luar kelas, melainkan harus melalui metode **Getter** dan **Setter** yang aman.
+
+---
+
+### 4. Polimorfisme (Polymorphism)
+Aplikasi memanfaatkan polimorfisme untuk fleksibilitas objek melalui beberapa metode:
+* **`getIdentifier()`**: Mengembalikan *username* pada objek `Admin`, dan *email* pada objek `Masyarakat`.
+* **`getTipeAkun()`**: Mengembalikan string `"Admin"` atau `"Masyarakat"` sesuai dengan tipe asli objek yang sedang berjalan.
+* **`SessionManager.login(Pengguna p)`**: Menerima argumen bertipe *superclass* `Pengguna`, sehingga mampu menyimpan sesi aktif dari objek subclass apa pun secara dinamis.
+
+---
+
+### 5. Manajemen Memori & Pola Desain (Collections & Singleton)
+* **Collections (`ArrayList`)**: Seluruh manajemen data disimpan sementara di dalam memori menggunakan objek `ArrayList<T>` yang dipusatkan pada satu gerbang data (`DataStore`).
+* **Singleton Pattern**: Kelas `DataStore` mengadopsi pola *Singleton*. Hal ini menjamin hanya ada **satu instance** media penyimpanan di seluruh siklus hidup aplikasi demi menjaga konsistensi data.
+
+---
+
+### 6. Penanganan Error (Exception Handling)
+Alur penanganan kesalahan dibagi menjadi dua peran:
+1. **Layer Service:** Bertugas melakukan validasi logika bisnis. Jika ditemukan input yang tidak valid atau melanggar aturan, *service* akan melempar `IllegalArgumentException`.
+2. **Layer View:** Semua aksi pengguna di layer ini dibungkus dengan blok `try-catch`. Layer ini bertugas menangkap (*catch*) *exception* dari *service* dan menampilkannya kepada pengguna dalam bentuk pesan error UI yang informatif.
+
+
+----
+
+### 📁 Struktur Folder Proyek
+
+Berikut adalah hierarki direktori dan organisasi komponen kode pada proyek **riverr-oop**:
+
 ```text
-«interface»          «abstract»
-IValidatable ────► Pengguna ◄──── IAuthenticatable (via Service)
-                      │
-              extends │ extends
-              ┌───────┴───────┐
-              ▼               ▼
-            Admin         Masyarakat
-         (username)      (email, alamat)
-
-DataStore (Singleton)
-  ├── List<Admin>
-  ├── List<Masyarakat>
-  ├── List<Sungai>
-  ├── List<TitikPantau>
-  ├── List<Laporan>
-  ├── List<Validasi>
-  └── List<TindakLanjut>
-
-Service (implements IManageable)
-  ├── AdminService      → getAdmins()
-  ├── MasyarakatService → getMasyarakats()
-  ├── LaporanService    → getLaporans()
-  ├── ValidasiService   → getValidasis() + LaporanService
-  ├── TindakLanjutService → getTindakLanjuts() + LaporanService
-  └── SungaiService     → getSungais() + getTitikPantaus()
-
-View (CardLayout)
-  MainFrame
-    ├── LoginPanel        → AdminService + MasyarakatService
-    ├── RegisterPanel     → MasyarakatService
-    ├── DashboardMasyarakat → LaporanService + SessionManager
-    ├── LaporanPanel      → LaporanService + SungaiService
-    ├── DashboardAdmin    → LaporanService + SessionManager
-    ├── ValidasiPanel     → ValidasiService + LaporanService
-    └── TindakLanjutPanel → TindakLanjutService + LaporanService
-🏛️ Konsep OOP yang Diterapkan
-Abstract Class & Inheritance (Superclass ➔ Subclass)
-
-Pengguna bertindak sebagai SUPERCLASS (abstract, tidak dapat di-instansiasi langsung).
-
-Diturunkan ke SUBCLASS: Admin (login via username) dan Masyarakat (login via email).
-
-Admin dan Masyarakat mewarisi field: id, nama, password, dan statusAkun dari Pengguna.
-
-Interface
-
-IManageable<T,ID>: Diimplementasikan pada semua Service sebagai kontrak CRUD generik.
-
-IAuthenticatable: Diimplementasikan pada AdminService dan MasyarakatService sebagai kontrak sistem login.
-
-IValidatable: Diimplementasikan di semua Model untuk kontrak validasi mandiri.
-
-Refreshable: Diimplementasikan pada semua Panel View untuk kontrak pembaruan data UI secara otomatis.
-
-Encapsulation
-
-Semua fields pada kelas model diset sebagai private atau protected, dan hanya dapat diakses secara aman melalui metode Getter dan Setter.
-
-Polymorphism
-
-getIdentifier(): Mengembalikan username pada objek Admin, dan email pada objek Masyarakat.
-
-getTipeAkun(): Mengembalikan nilai "Admin" atau "Masyarakat" sesuai tipe objek.
-
-SessionManager.login(Pengguna p): Menerima argumen bertipe superclass Pengguna untuk menyimpan sesi aktif secara dinamis.
-
-Collections (ArrayList)
-
-Seluruh manajemen data disimpan sementara di dalam memori menggunakan objek ArrayList<T> yang dipusatkan pada DataStore.
-
-Exception Handling
-
-Semua aksi pengguna di layer View dibungkus dengan blok try-catch.
-
-Layer Service bertugas melempar IllegalArgumentException apabila ditemukan input yang tidak valid atau melanggar aturan bisnis, kemudian ditangkap oleh View untuk ditampilkan dalam bentuk pesan error yang informatif.
-
-Singleton Pattern
-
-Kelas DataStore mengadopsi pola Singleton untuk menjamin hanya ada satu instance media penyimpanan di seluruh siklus hidup aplikasi agar data tetap konsisten.
-
-📁 Struktur Folder
-Plaintext
 riverr-oop/
 ├── src/
-│   ├── Main.java                    ← Entry point aplikasi
-│   ├── interfaces/
+│   ├── Main.java                      ← Entry point utama aplikasi
+│   │
+│   ├── interfaces/                    ← Kontrak arsitektur sistem
 │   │   ├── IManageable.java
 │   │   ├── IAuthenticatable.java
 │   │   └── IValidatable.java
-│   ├── models/
-│   │   ├── Pengguna.java            ← Abstract superclass
-│   │   ├── Admin.java               ← Subclass Pengguna
-│   │   ├── Masyarakat.java          ← Subclass Pengguna
+│   │
+│   ├── models/                        ← Kelas cetak biru data (Blueprint)
+│   │   ├── Pengguna.java              ← Abstract superclass
+│   │   ├── Admin.java                 ← Subclass dari Pengguna
+│   │   ├── Masyarakat.java            ← Subclass dari Pengguna
 │   │   ├── Laporan.java
 │   │   ├── Validasi.java
 │   │   ├── TindakLanjut.java
 │   │   ├── Sungai.java
 │   │   └── TitikPantau.java
-│   ├── services/
-│   │   ├── DataStore.java           ← Singleton + 7 ArrayList
-│   │   ├── SessionManager.java
+│   │
+│   ├── services/                      ← Logika bisnis, manajemen memori, & sesi
+│   │   ├── DataStore.java             ← Singleton Pattern (Pusat 7 ArrayList)
+│   │   ├── SessionManager.java        ← Manajemen sesi aktif (Polimorfisme)
 │   │   ├── MasyarakatService.java
 │   │   ├── AdminService.java
 │   │   ├── LaporanService.java
 │   │   ├── ValidasiService.java
 │   │   ├── TindakLanjutService.java
 │   │   └── SungaiService.java
-│   ├── view/
-│   │   ├── Refreshable.java
-│   │   ├── UIHelper.java
-│   │   ├── MainFrame.java
+│   │
+│   ├── view/                          ← Layer Antarmuka Pengguna (UI)
+│   │   ├── Refreshable.java           ← Kontrak auto-refresh UI
+│   │   ├── UIHelper.java              ← Utilitas pembantu komponen UI
+│   │   ├── MainFrame.java             ← Jendela utama aplikasi
 │   │   ├── LoginPanel.java
 │   │   ├── RegisterPanel.java
 │   │   ├── DashboardMasyarakatPanel.java
@@ -143,105 +130,170 @@ riverr-oop/
 │   │   ├── DashboardAdminPanel.java
 │   │   ├── ValidasiPanel.java
 │   │   └── TindakLanjutPanel.java
-│   └── test/
-│       ├── PenggunaModelTest.java   ← 18 test case
-│       ├── LaporanServiceTest.java  ← 25 test case
-│       └── MasyarakatServiceTest.java ← 17 test case
-├── docs/
-│   ├── class-diagram.png
+│   │
+│   └── test/                          ← Layer Pengujian Sistem (Unit Testing)
+│       ├── PenggunaModelTest.java     ← Memuat 18 test case
+│       ├── LaporanServiceTest.java    ← Memuat 25 test case
+│       └── MasyarakatServiceTest.java ← Memuat 17 test case
+│
+├── docs/                              ← Dokumentasi teknis proyek
+│   ├── class-diagram.png              ← Diagram visual arsitektur OOP
 │   ├── TAHAP_1_ROLE1_CLASS_ARCHITECT.md
 │   ├── TAHAP_2_ROLE2_DATA_ENGINEER.md
 │   ├── TAHAP_3_ROLE3_UI_ENGINEER.md
 │   └── TAHAP_4_ROLE4_QA_REPO_MASTER.md
+│
+└── lib/                               ← Library / Dependency eksternal
+    └── junit-platform-console-standalone-1.10.x.jar
+
+```
+---
+
+### 🔄 Alur Status Laporan
+
+Berikut adalah siklus hidup (*lifecycle*) penanganan status laporan sejak pertama kali dikirimkan oleh pengguna hingga selesai diproses:
+
+```text
+  [ Masyarakat buat laporan ]
+               │
+               ▼
+       ┌─[ MENUNGGU ]─┐
+       │              │
+       │ (Valid)      │ (Tidak Valid)
+       ▼              ▼
+  [ DIPROSES ]   [ DITOLAK ]
+       │
+       │ (Tindak Lanjut)
+       ▼
+  [ SELESAI ]
+
+```
+---
+
+### 🛠️ Arsitektur & Teknologi
+
+Proyek ini dibangun menggunakan spesifikasi teknologi dan standardisasi berikut:
+
+| Komponen | Teknologi / Spesifikasi | Peran & Deskripsi |
+| :--- | :--- | :--- |
+| **Bahasa Pemrograman** | Java (JDK 17 atau lebih baru) | Bahasa utama dengan fitur modern (Record, Pattern Matching, dll). |
+| **Antarmuka Grafis** | Java Swing (GUI) | *Framework* bawaan Java untuk membangun *desktop interface* (Layar Utama & Panel). |
+| **Paradigma** | Object-Oriented Programming (OOP) | Fondasi utama arsitektur sistem (*Inheritance, Polymorphism, Encapsulation*). |
+| **Penyimpanan Data** | Java Collections Framework (`ArrayList`) | Manajemen penyimpanan data terpusat secara sementara di dalam memori (*In-Memory Store*). |
+| **Pengujian** | JUnit Testing v5 | *Framework* pengujian otomatis untuk validasi model dan fungsionalitas service. |
+| **Version Control** | Git & GitHub | Media kolaborasi tim, pelacakan riwayat kode, dan manajemen repositori. |
+
+---
+
+### 🚀 Cara Menjalankan Aplikasi
+
+#### 🔹 Langkah Menggunakan IDE / Text Editor
+1. **Klon repositori ini:**
+   ```bash
+   git clone [https://github.com/USERNAME/riverr-oop.git](https://github.com/USERNAME/riverr-oop.git)
+   
+2. Buka proyek melalui IDE pilihan Anda (IntelliJ IDEA, Eclipse, NetBeans, atau VS Code).
+3. Atur source root proyek Anda ke direktori folder src/.
+4. Jalankan aplikasi dengan klik kanan pada file src/Main.java ➔ Pilih Run 'Main.main()'.
+
+🔹 Langkah Menggunakan Terminal (CLI)
+1. Buka terminal atau command prompt, lalu masuk ke direktori src:
+   ```Bash
+   cd src
+2. Kompilasi seluruh file Java yang ada di dalam package:
+   ```Bash
+   javac -cp . Main.java interfaces/*.java models/*.java services/*.java view/*.java
+3. Jalankan main class aplikasi:
+   ```Bash
+   java Main
+### 🔑 Akun Bawaan (Default Accounts)
+
+Aplikasi ini telah menyediakan data akun bawaan di dalam memori (`DataStore`) yang siap digunakan untuk pengujian sistem saat pertama kali dijalankan:
+
+| Role / Hak Akses | Identifier (Username / Email) | Password |
+| :--- | :--- | :--- |
+| 👤 **Admin** | `admin` *(Username)* | `admin123` |
+| 👥 **Masyarakat** | `budi@email.com` *(Email)* | `budi123` |
+
+--- 
+
+### 🧪 Cara Menjalankan Unit Test
+
+#### 📋 Prasyarat Pengujian
+Sebelum menjalankan pengujian otomatis, pastikan Anda memiliki *library* JUnit 5 standalone JAR di dalam folder `lib/`:
+
+```text
+riverr-oop/
 └── lib/
     └── junit-platform-console-standalone-1.10.x.jar
-🔄 Alur Status Laporan
-Plaintext
-[Masyarakat buat laporan]
-         │
-         ▼
-   ┌─ MENUNGGU ─┐
-   │            │
-   ▼ (Valid)    ▼ (Tidak Valid)
-DIPROSES     DITOLAK
-   │
-   ▼ (Tindak Lanjut)
-SELESAI
-🛠️ Arsitektur & Teknologi
-Bahasa Pemrograman: Java (JDK 17 atau lebih baru)
+```
+#### 🖥️ Eksekusi via IDE / Text Editor
 
-Antarmuka Grafis: Java Swing (GUI)
+Berikut adalah langkah-langkah untuk melakukan konfigurasi *library* JUnit 5 dan menjalankan *unit test* pada beberapa IDE populer:
 
-Paradigma: Object-Oriented Programming (OOP)
+* **VS Code (Visual Studio Code):**
+  1. Pastikan ekstensi **Extension Pack for Java** dan **Test Runner for Java** sudah terinstal.
+  2. Buka bagian **Java Projects** di *sidebar* kiri bawah pada panel Explorer.
+  3. Cari submenu **Referenced Libraries**, klik tanda **+ (plus)**, lalu pilih file `.jar` dari folder `lib/`.
+  4. Buka file pengujian di folder `test/` (misalnya: `PenggunaModelTest.java`).
+  5. Klik tombol **Run Test** yang muncul di atas deklarasi *class* atau *method*.
 
-Penyimpanan Data: Java Collections Framework (List / ArrayList - In-Memory)
+* **IntelliJ IDEA:**
+  1. Masuk ke menu **File** ➔ **Project Structure** ➔ **Libraries**.
+  2. Klik ikon **+ (plus)** lalu pilih opsi **Java**.
+  3. Pilih berkas `.jar` dari folder `lib/` proyek Anda dan klik OK.
+  4. Setelah berhasil dikonfigurasi, klik kanan pada direktori `src/test/` ➔ Pilih **Run 'All Tests'**.
 
-Pengujian: JUnit Testing v5
+* **NetBeans:**
+  1. Klik kanan pada nama proyek Anda ➔ Pilih **Properties**.
+  2. Masuk ke kategori **Libraries** ➔ Klik tombol **Add JAR/Folder**.
+  3. Cari dan pilih berkas `.jar` di dalam folder `lib/`.
+  4. Jika sudah ditambahkan, klik kanan pada direktori `test/` ➔ Pilih **Test Package**.
 
-Version Control: Git & GitHub
+#### ⌨️ Eksekusi via Terminal (CLI)
 
-🚀 Cara Menjalankan Aplikasi
-Langkah Menggunakan IDE / Text Editor
-Klon repositori ini:
+Jika Anda tidak menggunakan IDE dan ingin menjalankan seluruh rangkaian pengujian langsung dari baris perintah, ikuti langkah-langkah berikut:
 
-Bash
-git clone [https://github.com/USERNAME/riverr-oop.git](https://github.com/USERNAME/riverr-oop.git)
-Buka proyek melalui IDE pilihan Anda.
+1. Buka terminal Anda dan pastikan posisi direktori aktif berada di dalam folder `src`:
+   ```bash
+   cd src
+2. Kompilasi seluruh interface, model, service, serta seluruh berkas kode pengujian (test cases) dengan menyertakan library JUnit ke dalam classpath:
+   ```bash
+   javac -cp ../lib/junit-platform-console-standalone-1.10.x.jar interfaces/*.java models/*.java services/*.java test/*.java
+3. Jalankan pengujian secara massal untuk semua class yang berada di dalam paket (package) test:
+   ```Bash
+   java -jar ../lib/junit-platform-console-standalone-1.10.x.jar --class-path . --select-package test
+   
+ ---
 
-Atur source root ke direktori folder src/.
+ ### 📊 Ringkasan Test Cases
 
-Klik kanan pada file src/Main.java ➔ Pilih Run 'Main.main()'.
+Berikut adalah rekapitulasi total skenario pengujian unit (*unit testing*) yang telah diimplementasikan untuk menjamin keandalan sistem:
 
-Langkah Menggunakan Terminal
-Bash
-cd src
-javac -cp . Main.java interfaces/*.java models/*.java services/*.java view/*.java
-java Main
-Akun Bawaan (Default Accounts)
-Aplikasi menyediakan akun bawaan yang siap digunakan saat pertama kali dijalankan:
+| File Pengujian | Jumlah Test | Komponen yang Diuji | Status |
+| :--- | :---: | :--- | :---: |
+| **`PenggunaModelTest.java`** | 18 | *Inheritance, Polymorphism, Encapsulation*, Validasi Atribut Form |  Sukses |
+| **`LaporanServiceTest.java`** | 25 | Operasi CRUD Laporan, *Lifecycle* Status Laporan, Validasi Aturan Bisnis |  Sukses |
+| **`MasyarakatServiceTest.java`** | 17 | Operasi CRUD Masyarakat, Sistem Login (4 Skenario Berbeda), *Copy Protection* |  Sukses |
+| **TOTAL KASUS UJI** | **60** | **Seluruh komponen inti sistem telah teruji secara menyeluruh** | **STABIL & PASSED** |
 
-Role	Identifier	Password
-Admin	admin	admin123
-Masyarakat	budi@email.com	budi123
-🧪 Cara Menjalankan Unit Test
-Prasyarat Pengujian
-Pastikan Anda memiliki JUnit 5 standalone JAR di dalam folder lib/:
+> 💡 **Informasi Tambahan:** Seluruh 60 *test cases* di atas wajib menunjukkan hasil hijau (*Passed*) sebelum kode program digabungkan (*merge*) ke cabang utama repositori (`main/master branch`).
 
-lib/junit-platform-console-standalone-1.10.x.jar
+---
 
-Jika belum tersedia, unduh melalui Maven Central Repository.
+### 📝 Catatan Teknis Sistem
 
-Eksekusi via IDE / Text Editor
-VS Code (Visual Studio Code):
+Berikut adalah beberapa karakteristik penting, arsitektur penyimpanan, dan kebijakan penanganan kesalahan yang diterapkan dalam sistem ini:
 
-Pastikan ekstensi Extension Pack for Java dan Test Runner for Java sudah terinstal.
+> ⚠️ **In-Memory Storage (Penyimpanan Sementara):** > Karena sistem ini menggunakan *Java Collections Framework* (`ArrayList`) sebagai basis data, seluruh data bersifat **sementara di dalam memori**. Semua modifikasi data (tambah, ubah, hapus) akan di-*reset* kembali ke data awal (*default seed*) setiap kali aplikasi dijalankan ulang.
 
-Buka bagian Java Projects di sidebar kiri bawah panel Explorer.
+* 🏢 **Penerapan Singleton Pattern:**
+  Kelas `DataStore` mengadopsi pola *Singleton*. Hal ini menjamin bahwa seluruh komponen di layer *Service* mengakses dan memanipulasi satu instance media penyimpanan yang sama, sehingga data tetap sinkron dan seragam di seluruh sistem.
 
-Cari submenu Referenced Libraries, klik tanda + (plus), lalu masukkan file JAR dari folder lib/.
+* 🔐 **Manajemen Sesi Global:**
+  Kelas `SessionManager` memanfaatkan atribut statis (*static fields*) untuk melacak status autentikasi pengguna secara global. Ini memungkinkan aplikasi mengetahui siapa pengguna yang sedang aktif dari panel mana pun tanpa perlu mengoper objek pengguna secara manual.
 
-Buka file pengujian di folder test/ (misal: PenggunaModelTest.java), lalu klik tombol Run Test yang muncul di atas deklarasi class atau method.
+* 🛡️ **Robust Exception Handling:**
+  Seluruh bentuk eksepsi (*Exception*) yang dilempar oleh layer *Service* akibat pelanggaran aturan bisnis (misalnya: password kurang panjang atau email duplikat) wajib ditangani dengan baik oleh layer *View*. Pendekatan `try-catch` bertingkat digunakan untuk menangkap error tersebut dan mengubahnya menjadi pesan peringatan dialog UI demi menjaga pengalaman pengguna (*User Experience*).
 
-IntelliJ IDEA: Masuk ke File ➔ Project Structure ➔ Libraries ➔ klik + (Java). Pilih berkas JAR dari folder lib/. Jika sudah, klik kanan pada folder test/ ➔ Run Tests.
-
-NetBeans: Klik kanan pada proyek ➔ Properties ➔ Libraries ➔ Pilih Add JAR/Folder. Cari berkas JAR di folder lib/. Jika sudah, klik kanan folder test/ ➔ Test Package.
-
-Eksekusi via Terminal
-Bash
-cd src
-javac -cp ../lib/junit-platform-console-standalone-1.10.x.jar interfaces/*.java models/*.java services/*.java test/*.java
-java -jar ../lib/junit-platform-console-standalone-1.10.x.jar --class-path . --select-package test
-Ringkasan Test Cases
-File Test	Jumlah Test	Komponen yang Diuji
-PenggunaModelTest	18	Inheritance, Polymorphism, Encapsulation, Validasi
-LaporanServiceTest	25	CRUD Laporan, Lifecycle Status, Aturan Bisnis (Business Rules)
-MasyarakatServiceTest	17	CRUD Masyarakat, Login (4 Skenario berbeda), Copy protection
-Total Kasus Uji	60	Stabil & Lolos Pengujian
-📝 Catatan Teknis
-⚠️ In-Memory Storage: Data bersifat sementara (in-memory). Semua modifikasi data akan di-reset kembali seperti semula setiap kali aplikasi dijalankan ulang.
-
-DataStore menggunakan pola Singleton untuk menjamin seluruh instance Service mengakses data yang sinkron dan seragam.
-
-SessionManager memanfaatkan static fields untuk melacak status autentikasi pengguna secara global.
-
-Seluruh bentuk eksepsi (Exception) yang dilempar oleh layer Service ditangani dengan baik oleh layer View menggunakan pendekatan try-catch bertingkat untuk menjaga pengalaman pengguna.
+---
