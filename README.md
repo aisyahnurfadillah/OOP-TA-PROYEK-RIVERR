@@ -1,26 +1,36 @@
-#  River - OOP / Sistem Pelaporan Pencemaran Sungai
+# RiverR - Sistem Pelaporan Pencemaran Sungai
 
-## Kelompok 7
+## Update Versi 2.0 - Fitur Laporan Darurat
 
-## 👥 Profil & Pembagian Peran Kelompok
+Versi 2.0 menambahkan fitur **Laporan Darurat** sebagai kategori prioritas pada sistem
+pelaporan pencemaran sungai RiverR. Fitur ini diimplementasikan melalui subclass
+`LaporanDarurat` yang mewarisi class `Laporan`, dilengkapi atribut unik `jenisZatBerbahaya`
+dan `estimasiVolumeLiter` beserta Constructor, Getter, Setter, dan Override method
+`validate()` dan `toString()` sebagai bentuk Polimorfisme.
 
-Berikut adalah rincian kontribusi, tanggung jawab, dan bukti pengerjaan objektif dari setiap anggota tim pengembang:
+Pembaruan ini juga mencakup `LaporanDaruratService` untuk menyimpan objek darurat ke
+ArrayList yang sama dengan Laporan biasa, fitur filter khusus laporan darurat, dan sorting
+berdasarkan tingkat keparahan. Validasi input diamankan menggunakan Custom Exception
+`InputTidakValidException` dengan blok try-catch sehingga aplikasi tidak crash saat input
+kosong atau tipe data salah. Panel `LaporanDaruratPanel` terintegrasi langsung ke dashboard
+masyarakat sebagai menu interaktif baru.
 
-| NIM & Nama | Peran Utama | Rincian Tugas & Fokus | Bukti Objektif di Git |
-| :--- | :--- | :--- | :--- |
-| **254311027**<br>Bangkit Cahya LInuwih | **Role 1: Class Architect**<br>*(Fokus: Struktur OOP)* | • Membuat Class Diagram.<br>• Mendefinisikan *Superclass*, *Subclass*, *Interface*, dan *Abstract Class*.<br>• Memastikan implementasi *Encapsulation* (Getter/Setter) diterapkan dengan benar. | Pembuat file model / entitas utama.<br>*(Contoh: `Hero.java`, `User.java`)* |
-| **254311007**<br>SILFINA NUR FADILAH | **⚙️ Role 2: Data & Logic Engineer**<br>*(Fokus: Collections & CRUD)* | • Mengimplementasikan *ArrayList* atau *List* sebagai media penyimpanan data di memori.<br>• Membuat fungsi logika *Create, Read, Update, Delete* (CRUD) untuk memanipulasi objek. | Pembuat file Controller atau Service.<br>*(Contoh: `InventoryController.java`)* |
-| **254311015**<br>ABDUL AZIZ MUSHTHOFA | **🛡️ Role 3: UI & Robustness Engineer**<br>*(Fokus: Debugging & Form)* | • Merancang menu interaksi aplikasi (Console / *Scanner*).<br>• Mengimplementasikan blok *try-catch* pada setiap input user.<br>• Melakukan validasi data input agar aplikasi tidak mudah *crash*. | Pembuat file View / Main Menu dan penanggung jawab blok *Exception Handling*. |
-| **254311001**<br>AISYAH NUR FADILLAH | **🧪 Role 4: Quality Assurance & Repo Master**<br>*(Fokus: Testing & Git)* | • Mengelola *merging branch* di Git dan menyelesaikan jika terjadi *code conflict*.<br>• Menulis skenario pengujian menggunakan *Unit Testing* (JUnit).<br>• Menyusun dokumentasi teknis akhir proyek. | Pembuat file Test *(Contoh: `HeroTest.java`)*, grafik aktivitas *merge* di GitHub, dan penulis utama `README.md`. |
+## Tentang Proyek
 
----
+RiverR adalah aplikasi berbasis Java Swing untuk melaporkan pencemaran sungai secara digital.
+Masyarakat dapat membuat laporan pencemaran, dan admin dapat memvalidasi serta menindaklanjuti
+laporan yang masuk.
 
-## 🛠️ Arsitektur & Teknologi
+## Teknologi
 
-*   **Bahasa Pemrograman:** Java
-*   **Paradigma:** Object-Oriented Programming (OOP)
-*   **Penyimpanan Data:** Java Collections Framework (*List / ArrayList*)
-*   **Pengujian:** JUnit Testing
-*   **Version Control:** Git & GitHub
+- Java (OOP, Collections, Exception Handling)
+- Java Swing (GUI)
+- JUnit (Testing)
+- Git & GitHub (Version Control)
 
----
+## Cara Menjalankan
+
+```bash
+javac -cp src src/models/*.java src/interfaces/*.java src/exceptions/*.java src/services/*.java src/views/*.java src/Main.java
+java -cp src Main
+```
