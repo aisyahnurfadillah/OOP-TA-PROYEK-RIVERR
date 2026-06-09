@@ -33,6 +33,7 @@ public class LaporanPanel extends JPanel implements Refreshable {
     });
     private final JTextArea txtDeskripsi = new JTextArea(4, 30);
     private final JLabel    lblErr       = UIHelper.buatLabelError();
+    private final JTextField txtSla = views.UIHelper.buatInput(10); // Input baru untuk UAS
 
     // Simpan list untuk mapping index dropdown → object
     private List<Sungai>      listSungai;
@@ -87,10 +88,16 @@ public class LaporanPanel extends JPanel implements Refreshable {
         g.gridx = 1; add(new JScrollPane(txtDeskripsi), g);
 
         // Error
-        g.gridx = 0; g.gridy = 6; g.gridwidth = 2;
+        g.gridx = 0; g.gridy = 7; g.gridwidth = 2;
         add(lblErr, g);
 
-        // Tombol
+        // Input SLA untuk Laporan Prioritas (UAS)
+        g.gridx = 0; g.gridy = 6; add(new JLabel("Batas Waktu SLA (Jam):"), g);
+        txtSla.setToolTipText("Wajib diisi angka jika tingkat pencemaran BERAT");
+        g.gridx = 1; add(txtSla, g);
+
+
+               // Tombol
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         btnPanel.setOpaque(false);
         JButton btnBatal = UIHelper.buatTombolOutline("Batal", Color.GRAY);
@@ -99,7 +106,7 @@ public class LaporanPanel extends JPanel implements Refreshable {
         btnKirim.addActionListener(e -> doKirim());
         btnPanel.add(btnBatal);
         btnPanel.add(btnKirim);
-        g.gridy = 7; add(btnPanel, g);
+        g.gridy = 8; add(btnPanel, g);
     }
 
     /** Isi dropdown titik pantau berdasarkan sungai yang dipilih */
@@ -118,47 +125,62 @@ public class LaporanPanel extends JPanel implements Refreshable {
     }
 
     private void doKirim() {
-        try {
-            // Validasi input
-            if (listTitik == null || listTitik.isEmpty())
-                throw new IllegalArgumentException("Pilih sungai dan titik pantau terlebih dahulu.");
+    try {
+        if (listTitik == null || listTitik.isEmpty())
+            throw new IllegalArgumentException("Pilih sungai dan titik pantau terlebih dahulu.");
 
-            String desk = txtDeskripsi.getText().trim();
-            if (desk.isEmpty())
-                throw new IllegalArgumentException("Deskripsi tidak boleh kosong.");
+        String desk = txtDeskripsi.getText().trim();
+        if (desk.isEmpty())
+            throw new IllegalArgumentException("Deskripsi tidak boleh kosong.");
 
-            // Cek sesi login
-            Masyarakat user = SessionManager.getMasyarakat();
-            if (user == null)
-                throw new IllegalStateException("Sesi login tidak valid. Silakan login ulang.");
+        Masyarakat user = services.SessionManager.getMasyarakat();
+        if (user == null)
+            throw new IllegalStateException("Sesi login tidak valid. Silakan login ulang.");
 
-            TitikPantau titik = listTitik.get(cmbTitik.getSelectedIndex());
+        TitikPantau titik = listTitik.get(cmbTitik.getSelectedIndex());
+        String tingkat = (String) cmbTingkat.getSelectedItem();
+        
+        Laporan l; // Polimorfisme: Deklarasi tipe Superclass
 
-            // Buat object Laporan — id=0 karena akan di-assign Service
-            Laporan l = new Laporan(
-                0,
-                user.getId(),
-                titik.getIdTitikPantau(),
-                (String) cmbJenis.getSelectedItem(),
-                (String) cmbTingkat.getSelectedItem(),
-                desk,
-                LocalDate.now()
-            );
-
-            // Service memanggil l.validate() sebelum simpan
-            new LaporanService().tambah(l);
-
-            JOptionPane.showMessageDialog(this,
-                "✅ Laporan berhasil dikirim!\nStatus: Menunggu validasi admin.",
-                "Berhasil", JOptionPane.INFORMATION_MESSAGE);
-            frame.showPanel(MainFrame.DASHBOARD_M);
-
-        } catch (IllegalArgumentException | IllegalStateException ex) {
-            lblErr.setText(ex.getMessage());
-        } catch (Exception ex) {
-            lblErr.setText("Error tidak terduga: " + ex.getMessage());
+        // --- TAMBAHAN UAS: Validasi Try-Catch Custom Exception ---
+        if ("berat".equalsIgnoreCase(tingkat)) {
+            String slaText = txtSla.getText().trim();
+            if (slaText.isEmpty()) {
+                throw new models.InputTidakValidExceptions("Karena status BERAT, SLA wajib diisi!");
+            }
+            int slaJam;
+            try {
+                slaJam = Integer.parseInt(slaText);
+                if (slaJam <= 0) throw new models.InputTidakValidExceptions("SLA harus lebih besar dari 0.");
+            } catch (NumberFormatException e) {
+                throw new models.InputTidakValidExceptions("Input SLA gagal! Harus berupa angka (contoh: 24).");
+            }
+            
+            // Instansiasi Subclass
+            l = new models.LaporanPrioritas(0, user.getId(), titik.getIdTitikPantau(),
+                    (String) cmbJenis.getSelectedItem(), tingkat, desk, LocalDate.now(), slaJam);
+        } else {
+            // Instansiasi Superclass normal
+            l = new models.Laporan(0, user.getId(), titik.getIdTitikPantau(),
+                    (String) cmbJenis.getSelectedItem(), tingkat, desk, LocalDate.now());
         }
+
+        new services.LaporanService().tambah(l);
+
+        JOptionPane.showMessageDialog(this,
+            "✅ Laporan berhasil dikirim!\nStatus: Menunggu validasi admin.",
+            "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+        frame.showPanel(views.MainFrame.DASHBOARD_M);
+
+    } catch (models.InputTidakValidExceptions ex) {
+        // Menangkap error dari Custom Exception buatan sendiri
+        lblErr.setText("Error Prioritas: " + ex.getMessage());
+    } catch (IllegalArgumentException | IllegalStateException ex) {
+        lblErr.setText(ex.getMessage());
+    } catch (Exception ex) {
+        lblErr.setText("Error tidak terduga: " + ex.getMessage());
     }
+}
 
     @Override
     public void onShow() {
