@@ -1,18 +1,17 @@
 package views;
 
+import java.awt.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import models.Admin;
 import models.Laporan;
 import services.LaporanService;
 import services.SessionManager;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.List;
-
 /**
- * Dashboard Admin — tampilkan semua laporan dari semua masyarakat.
+ * Dashboard Admin â€” tampilkan semua laporan dari semua masyarakat.
  * Admin pilih baris, lalu klik tombol Validasi atau Tindak Lanjut.
  *
  * @author Stipen (Role 3 - UI & Robustness Engineer)
@@ -40,7 +39,7 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
     };
     private final JTable table = new JTable(tableModel);
 
-    // Simpan ID laporan yang dipilih — dikirim ke panel berikutnya
+    // Simpan ID laporan yang dipilih â€” dikirim ke panel berikutnya
     private int idLaporanTerpilih = -1;
 
     public DashboardAdminPanel(MainFrame frame) {
@@ -52,8 +51,8 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
     }
 
     private void buildUI() {
-        // ── HEADER ────────────────────────────────────────────
         JPanel header = new JPanel(new BorderLayout());
+        
         header.setOpaque(false);
         lblSapa.setFont(new Font("SansSerif", Font.BOLD, 17));
         lblSapa.setForeground(UIHelper.BIRU);
@@ -66,7 +65,7 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         header.add(btnLogout, BorderLayout.EAST);
         add(header, BorderLayout.NORTH);
 
-        // ── STATISTIK ─────────────────────────────────────────
+        
         JPanel statPanel = new JPanel(new GridLayout(1, 4, 10, 0));
         statPanel.setOpaque(false);
         statPanel.add(buatKartu("Total Laporan", lblTotal, Color.DARK_GRAY));
@@ -74,7 +73,7 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         statPanel.add(buatKartu("Diproses", lblDiproses, UIHelper.BIRU));
         statPanel.add(buatKartu("Selesai", lblSelesai, UIHelper.HIJAU));
 
-        // ── CENTER ────────────────────────────────────────────
+        // â”€â”€ CENTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         JPanel center = new JPanel(new BorderLayout(0, 10));
         center.setOpaque(false);
         center.add(statPanel, BorderLayout.NORTH);
@@ -107,22 +106,23 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         center.add(new JScrollPane(table), BorderLayout.CENTER);
         add(center, BorderLayout.CENTER);
 
-        // ── FOOTER ────────────────────────────────────────────
+        // â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         JPanel footer = new JPanel(new BorderLayout());
         footer.setOpaque(false);
-        JLabel hint = UIHelper.buatSubtitle("← Pilih baris laporan, lalu klik aksi");
+        JLabel hint = UIHelper.buatSubtitle("â† Pilih baris laporan, lalu klik aksi");
         footer.add(hint, BorderLayout.WEST);
 
         JPanel aksi = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         aksi.setOpaque(false);
-        JButton btnVal = UIHelper.buatTombol("✔ Validasi", UIHelper.BIRU);
-        JButton btnTL = UIHelper.buatTombol("⚡ Tindak Lanjut", UIHelper.HIJAU);
+        JButton btnVal = UIHelper.buatTombol("âœ” Validasi", UIHelper.BIRU);
+        JButton btnTL = UIHelper.buatTombol("âš¡ Tindak Lanjut", UIHelper.HIJAU);
 
         btnVal.addActionListener(e -> pindahKePanel(MainFrame.VALIDASI));
         btnTL.addActionListener(e -> pindahKePanel(MainFrame.TINDAK));
 
         aksi.add(btnVal);
         aksi.add(btnTL);
+       
         footer.add(aksi, BorderLayout.EAST);
         add(footer, BorderLayout.SOUTH);
     }
@@ -226,7 +226,7 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
     public void onShow() {
         Admin a = SessionManager.getAdmin();
         if (a != null)
-            lblSapa.setText("🛡️ Admin: " + a.getNama());
+            lblSapa.setText("ðŸ›¡ï¸ Admin: " + a.getNama());
         loadData();
     }
 }

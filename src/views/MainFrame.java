@@ -1,8 +1,8 @@
 package views;
 
-import services.SessionManager;
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import services.SessionManager;
 
 /**
  * Window utama aplikasi RiverR.
@@ -26,9 +26,10 @@ public class MainFrame extends JFrame {
     public static final String LAPORAN = "LAPORAN";
     public static final String VALIDASI = "VALIDASI";
     public static final String TINDAK = "TINDAK_LANJUT";
+    public static final String LAPORAN_DARURAT = "LAPORAN_DARURAT";
 
     public MainFrame() {
-        setTitle("RiverR – Sistem Pelaporan Pencemaran Sungai");
+        setTitle("RiverR - Sistem Pelaporan Pencemaran Sungai");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(920, 640);
         setLocationRelativeTo(null);
@@ -41,6 +42,7 @@ public class MainFrame extends JFrame {
         container.add(new LaporanPanel(this), LAPORAN);
         container.add(new ValidasiPanel(this), VALIDASI);
         container.add(new TindakLanjutPanel(this), TINDAK);
+        container.add(new LaporanDaruratPanel(this), LAPORAN_DARURAT);
 
         add(container);
         showPanel(LOGIN);
