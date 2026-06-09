@@ -297,3 +297,8 @@ Berikut adalah beberapa karakteristik penting, arsitektur penyimpanan, dan kebij
   Seluruh bentuk eksepsi (*Exception*) yang dilempar oleh layer *Service* akibat pelanggaran aturan bisnis (misalnya: password kurang panjang atau email duplikat) wajib ditangani dengan baik oleh layer *View*. Pendekatan `try-catch` bertingkat digunakan untuk menangkap error tersebut dan mengubahnya menjadi pesan peringatan dialog UI demi menjaga pengalaman pengguna (*User Experience*).
 
 ---
+## Update Versi 2.0
+
+Versi ini menambahkan fitur **Laporan Urgent** sebagai penanganan laporan pencemaran yang bersifat darurat dan membutuhkan penanganan prioritas tinggi. Fitur ini diimplementasikan melalui subclass `LaporanUrgent` yang mewarisi class `Laporan`, dilengkapi atribut `tingkatUrgensi` (TINGGI/KRITIS) dan override method `validate()` serta `toString()`.
+
+Selain itu, ditambahkan method `cariLaporanUrgent()` di `LaporanService` untuk memfilter laporan urgent dari ArrayList, serta `InputTidakValidException` sebagai custom exception untuk validasi input pada form laporan urgent agar aplikasi tidak crash saat input tidak valid.
