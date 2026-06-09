@@ -51,20 +51,30 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         buildUI();
     }
 
-    private void buildUI() {
+   private void buildUI() {
         // ── HEADER ────────────────────────────────────────────
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
+        
         lblSapa.setFont(new Font("SansSerif", Font.BOLD, 17));
         lblSapa.setForeground(UIHelper.BIRU);
         header.add(lblSapa, BorderLayout.WEST);
+        
+        // Tombol Logout
         JButton btnLogout = UIHelper.buatTombolOutline("Logout", UIHelper.MERAH);
         btnLogout.addActionListener(e -> {
             SessionManager.logout();
             frame.showPanel(MainFrame.LOGIN);
         });
         header.add(btnLogout, BorderLayout.EAST);
+
+        // tambahan UAS: Tombol Filter
+        JButton btnFilter = UIHelper.buatTombolOutline("🔥 Filter Prioritas", java.awt.Color.RED);
+        btnFilter.addActionListener(e -> loadDataPrioritas());
+        header.add(btnFilter, BorderLayout.CENTER); // Menambahkan di tengah header
+
         add(header, BorderLayout.NORTH);
+        
 
         // ── STATISTIK ─────────────────────────────────────────
         JPanel statPanel = new JPanel(new GridLayout(1, 4, 10, 0));
@@ -220,6 +230,38 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
                     "Gagal memuat data: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+        // Tambahan UAS:Fitur Filter
+    private void loadDataPrioritas() {
+        tableModel.setRowCount(0);
+        idLaporanTerpilih = -1;
+        try {
+            java.util.List<models.Laporan> listSemua = new services.LaporanService().cariSemua();
+        
+        // Memfilter data ArrayList hanya untuk Subclass LaporanPrioritas
+            java.util.List<models.Laporan> listPrioritas = listSemua.stream()
+                .filter(l -> l instanceof models.LaporanPrioritas)
+                .toList();
+
+            lblTotal.setText(String.valueOf(listPrioritas.size()));
+        
+            for (models.Laporan l : listPrioritas) {
+            tableModel.addRow(new Object[]{
+                "#" + l.getIdLaporan(),
+                "User #" + l.getIdMasyarakat(),
+                l.getJenisPencemaran(), // Ini akan memanggil fungsi Override LaporanPrioritas secara Polymorphism
+                l.getTingkatPencemaran(),
+                l.getStatusLaporan(),
+                l.getTanggalLaporan()
+            });
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this,
+            "Gagal memuat data filter: " + ex.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     }
 
     @Override
