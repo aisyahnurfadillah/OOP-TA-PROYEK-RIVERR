@@ -92,13 +92,13 @@ public class LaporanService implements IManageable<Laporan, Integer> {
             .collect(Collectors.toList());
     }
 
-    /** Tambah laporan urgent dengan Custom Exception. Bagian C. */
-    public void tambahUrgent(LaporanUrgent lu) throws InputTidakValidException {
+        /** Tambah laporan urgent dengan Custom Exception. Bagian C. */
+        public void tambahUrgent(LaporanUrgent lu) throws InputTidakValidException {
         try {
+            lu.setTanggalLaporan(java.time.LocalDate.now()); // pindah ke PALING ATAS
             lu.validate();
             lu.setIdLaporan(store.nextIdLaporan());
             lu.setStatusLaporan(Laporan.STATUS_MENUNGGU);
-            lu.setTanggalLaporan(java.time.LocalDate.now());
             store.getLaporans().add(lu);
         } catch (IllegalArgumentException e) {
             throw new InputTidakValidException(e.getMessage());

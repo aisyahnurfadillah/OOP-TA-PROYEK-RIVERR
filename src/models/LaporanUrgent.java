@@ -19,10 +19,10 @@ public class LaporanUrgent extends Laporan {
     }
 
     public LaporanUrgent(int idMasyarakat, int idTitikPantau,
-                         String jenisPencemaran, String tingkatPencemaran,
-                         String deskripsi, String tingkatUrgensi) {
+                        String jenisPencemaran, String tingkatPencemaran,
+                        String deskripsi, String tingkatUrgensi) {
         super(0, idMasyarakat, idTitikPantau,
-              jenisPencemaran, tingkatPencemaran, deskripsi, null);
+            jenisPencemaran, tingkatPencemaran, deskripsi, java.time.LocalDate.now());
         this.tingkatUrgensi = tingkatUrgensi;
     }
 
@@ -32,9 +32,14 @@ public class LaporanUrgent extends Laporan {
         this.tingkatUrgensi = tingkatUrgensi;
     }
 
-    @Override
+   @Override
     public boolean validate() throws IllegalArgumentException {
-        super.validate();
+        if (getIdMasyarakat() <= 0)
+            throw new IllegalArgumentException("ID Masyarakat tidak valid.");
+        if (getJenisPencemaran() == null || getJenisPencemaran().isBlank())
+            throw new IllegalArgumentException("Jenis pencemaran tidak boleh kosong.");
+        if (getDeskripsi() == null || getDeskripsi().isBlank())
+            throw new IllegalArgumentException("Deskripsi tidak boleh kosong.");
         if (tingkatUrgensi == null || tingkatUrgensi.isBlank())
             throw new IllegalArgumentException("Tingkat urgensi tidak boleh kosong.");
         if (!tingkatUrgensi.equalsIgnoreCase("TINGGI") &&
