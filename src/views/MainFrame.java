@@ -26,7 +26,8 @@ public class MainFrame extends JFrame {
     public static final String LAPORAN = "LAPORAN";
     public static final String VALIDASI = "VALIDASI";
     public static final String TINDAK = "TINDAK_LANJUT";
-
+    public static final String LAPORAN_URGENT = "LAPORAN_URGENT";
+    
     public MainFrame() {
         setTitle("RiverR – Sistem Pelaporan Pencemaran Sungai");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,7 +42,7 @@ public class MainFrame extends JFrame {
         container.add(new LaporanPanel(this), LAPORAN);
         container.add(new ValidasiPanel(this), VALIDASI);
         container.add(new TindakLanjutPanel(this), TINDAK);
-
+        container.add(new LaporanUrgentPanel(this), LAPORAN_URGENT);
         add(container);
         showPanel(LOGIN);
     }

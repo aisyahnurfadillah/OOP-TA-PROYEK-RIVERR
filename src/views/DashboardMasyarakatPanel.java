@@ -108,6 +108,10 @@ public class DashboardMasyarakatPanel extends JPanel implements Refreshable {
         JButton btnBuat = UIHelper.buatTombol("+ Buat Laporan Baru", UIHelper.BIRU);
         btnBuat.addActionListener(e -> frame.showPanel(MainFrame.LAPORAN));
         footer.add(btnBuat);
+
+        JButton btnUrgent = UIHelper.buatTombol("!! Laporan Urgent", Color.RED.darker());
+        btnUrgent.addActionListener(e -> frame.showPanel(MainFrame.LAPORAN_URGENT));
+        footer.add(btnUrgent);
         add(footer, BorderLayout.SOUTH);
     }
 
