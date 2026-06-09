@@ -26,6 +26,7 @@ public class MainFrame extends JFrame {
     public static final String LAPORAN = "LAPORAN";
     public static final String VALIDASI = "VALIDASI";
     public static final String TINDAK = "TINDAK_LANJUT";
+    public static final String PETUGAS = "PETUGAS_UAS"; // <-- Tambahkan ini
 
     public MainFrame() {
         setTitle("RiverR – Sistem Pelaporan Pencemaran Sungai");
@@ -41,6 +42,7 @@ public class MainFrame extends JFrame {
         container.add(new LaporanPanel(this), LAPORAN);
         container.add(new ValidasiPanel(this), VALIDASI);
         container.add(new TindakLanjutPanel(this), TINDAK);
+        container.add(new PetugasPanel(this), PETUGAS);
 
         add(container);
         showPanel(LOGIN);

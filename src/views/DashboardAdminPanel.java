@@ -16,6 +16,7 @@ import java.util.List;
  * Admin pilih baris, lalu klik tombol Validasi atau Tindak Lanjut.
  *
  * @author Stipen (Role 3 - UI & Robustness Engineer)
+ * @modifier (Nama Anda - UAS Integration)
  */
 public class DashboardAdminPanel extends JPanel implements Refreshable {
 
@@ -115,12 +116,22 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
 
         JPanel aksi = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         aksi.setOpaque(false);
+
         JButton btnVal = UIHelper.buatTombol("✔ Validasi", UIHelper.BIRU);
         JButton btnTL = UIHelper.buatTombol("⚡ Tindak Lanjut", UIHelper.HIJAU);
+
+        // PENAMBAHAN UAS: Tombol Navigasi khusus menuju halaman Petugas Panel
+        JButton btnPetugas = UIHelper.buatTombol("👤 Kelola Petugas UAS", Color.DARK_GRAY);
 
         btnVal.addActionListener(e -> pindahKePanel(MainFrame.VALIDASI));
         btnTL.addActionListener(e -> pindahKePanel(MainFrame.TINDAK));
 
+        // PENAMBAHAN UAS: Menghubungkan klik tombol dengan CardLayout MainFrame
+        btnPetugas.addActionListener(e -> frame.showPanel(MainFrame.PETUGAS));
+
+        // Menyusun tombol di footer kanan (Tombol Kelola Petugas disisipkan di awal
+        // barisan)
+        aksi.add(btnPetugas);
         aksi.add(btnVal);
         aksi.add(btnTL);
         footer.add(aksi, BorderLayout.EAST);
