@@ -1,13 +1,12 @@
-﻿package views;
+package views;
 
 import exceptions.InputTidakValidException;
-import models.LaporanDarurat;
-import services.LaporanDaruratService;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import models.LaporanDarurat;
+import services.LaporanDaruratService;
 
 /**
  * BAGIAN C - UI & Exception Handling
@@ -19,7 +18,10 @@ public class LaporanDaruratPanel extends JPanel {
     private final DefaultTableModel tableModel;
     private final JTable table;
 
-    public LaporanDaruratPanel() {
+    private final MainFrame frame;
+
+    public LaporanDaruratPanel(MainFrame frame) {
+        this.frame = frame;
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -48,8 +50,13 @@ public class LaporanDaruratPanel extends JPanel {
         panelTombol.add(btnTambah);
         panelTombol.add(btnFilter);
         panelTombol.add(btnSort);
+        JButton btnKembali = new JButton("Kembali");
+        btnKembali.addActionListener(e -> frame.showPanel(MainFrame.DASHBOARD_M));
+        panelTombol.add(btnKembali);
         add(panelTombol, BorderLayout.SOUTH);
     }
+
+
 
     private void tambahLaporan() {
         try {
