@@ -66,13 +66,13 @@ class PenggunaModelTest {
     // ═══════════════════════════════════════════════════════
     // BAGIAN 2: POLYMORPHISM
     // ═══════════════════════════════════════════════════════
-//memastikan tiap subclass memiliki perilaku berbeda
+
     @Test
     @Order(5)
     @DisplayName("[Polymorphism] getTipeAkun() — Admin return 'Admin'")
     void testAdminGetTipeAkun() {
         Pengguna p = new Admin(1, "Eko", "eko_admin", "pass123", "aktif");
-        assertEquals("Admin", p.getTipeAkun()); //assertEquals() digunakan untuk membandingkan nilai aktual dengan nilai yang diharapkan. Misalnya memastikan getTipeAkun() menghasilkan "Admin".
+        assertEquals("Admin", p.getTipeAkun());
     }
 
     @Test
@@ -126,7 +126,7 @@ class PenggunaModelTest {
     // ═══════════════════════════════════════════════════════
     // BAGIAN 3: ENCAPSULATION
     // ═══════════════════════════════════════════════════════
-//getter setter utk memastikan data bs diakses scr aman melalui method bukan field langsung
+
     @Test
     @Order(11)
     @DisplayName("[Encapsulation] Getter/Setter Admin berfungsi dengan benar")
@@ -170,13 +170,13 @@ class PenggunaModelTest {
     // ═══════════════════════════════════════════════════════
     // BAGIAN 4: VALIDASI (IValidatable)
     // ═══════════════════════════════════════════════════════
-//menguji input valid, exception error yg dilempar
+
     @Test
     @Order(13)
     @DisplayName("[Validasi] Admin valid — tidak lempar exception")
     void testAdminValidTidakThrow() {
         Admin a = new Admin(1, "Omar", "omar_admin", "pass123", "aktif");
-        assertDoesNotThrow(a::validate, //memastikan method berjalan normal tanpa error jika data valido
+        assertDoesNotThrow(a::validate,
                 "Admin dengan data lengkap tidak boleh throw exception");
     }
 
@@ -216,7 +216,7 @@ class PenggunaModelTest {
     void testValidateEmailTidakValid() {
         Masyarakat m = new Masyarakat(1, "Tono", "tono-tanpa-at", "Jl.T", "pass123", "aktif");
         assertThrows(IllegalArgumentException.class, m::validate,
-                "Email tanpa @ harus ditolak"); //memastikan program melempar exception ketika input salah
+                "Email tanpa @ harus ditolak");
     }
 
     @Test
