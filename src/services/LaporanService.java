@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import exceptions.InputTidakValidException;
+import models.LaporanUrgent;
 /**
  * CRUD Laporan dengan filter dan perubahan status lifecycle.
  *
@@ -82,5 +84,24 @@ public class LaporanService implements IManageable<Laporan, Integer> {
         if (l == null) return false;
         l.setStatusLaporan(statusBaru);
         return true;
+    }
+    /** Filter — hanya LaporanUrgent. Bagian B: Collections. */
+    public List<Laporan> cariLaporanUrgent() {
+        return store.getLaporans().stream()
+            .filter(l -> l instanceof LaporanUrgent)
+            .collect(Collectors.toList());
+    }
+
+    /** Tambah laporan urgent dengan Custom Exception. Bagian C. */
+    public void tambahUrgent(LaporanUrgent lu) throws InputTidakValidException {
+        try {
+            lu.validate();
+            lu.setIdLaporan(store.nextIdLaporan());
+            lu.setStatusLaporan(Laporan.STATUS_MENUNGGU);
+            lu.setTanggalLaporan(java.time.LocalDate.now());
+            store.getLaporans().add(lu);
+        } catch (IllegalArgumentException e) {
+            throw new InputTidakValidException(e.getMessage());
+        }
     }
 }
