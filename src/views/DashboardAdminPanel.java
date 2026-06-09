@@ -2,7 +2,9 @@ package views;
 
 import models.Admin;
 import models.Laporan;
+import models.Masyarakat;
 import services.LaporanService;
+import services.MasyarakatService;
 import services.SessionManager;
 
 import javax.swing.*;
@@ -16,6 +18,7 @@ import java.util.List;
  * Admin pilih baris, lalu klik tombol Validasi atau Tindak Lanjut.
  *
  * @author Stipen (Role 3 - UI & Robustness Engineer)
+ * @co-author Bangkit (Role 1 - Class Architect - Perbaikan Pemetaan Nama)
  */
 public class DashboardAdminPanel extends JPanel implements Refreshable {
 
@@ -167,6 +170,9 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         idLaporanTerpilih = -1;
         try {
             List<Laporan> list = new LaporanService().cariSemua();
+            MasyarakatService masyarakatService = new MasyarakatService(); // Instansiasi Service untuk mencari objek
+                                                                           // Masyarakat
+
             long menunggu = list.stream().filter(l -> Laporan.STATUS_MENUNGGU.equals(l.getStatusLaporan())).count();
             long diproses = list.stream().filter(l -> Laporan.STATUS_DIPROSES.equals(l.getStatusLaporan())).count();
             long selesai = list.stream().filter(l -> Laporan.STATUS_SELESAI.equals(l.getStatusLaporan())).count();
@@ -177,10 +183,14 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
             lblSelesai.setText(String.valueOf(selesai));
 
             for (Laporan l : list) {
-                // SOLUSI UI-ONLY: Mapping ID ke String Nama secara lokal di UI
-                String namaPelapor = "User #" + l.getIdMasyarakat();
-                if (l.getIdMasyarakat() == 2) {
-                    namaPelapor = "Dilla"; // Sesuai data dummy/akun testing Anda
+                // SOLUSI DINAMIS: Menggunakan cariById secara dinamis sesuai kontrak
+                // IManageable
+                String namaPelapor = "User #" + l.getIdMasyarakat(); // Fallback jika objek data masyarakat tidak
+                                                                     // ditemukan
+                Masyarakat m = masyarakatService.cariById(l.getIdMasyarakat());
+
+                if (m != null) {
+                    namaPelapor = m.getNama(); // Mengambil nama asli dari model data Pengguna/Masyarakat
                 }
 
                 // SOLUSI UI-ONLY: Pemetaan data Sungai & Titik Pantau berdasarkan idTitikPantau
@@ -201,9 +211,13 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
                         namaSungai = "Sungai Bengawan Solo";
                         titikPantau = "Sektor Utara";
                     }
+                    case 4 -> {
+                        namaSungai = "Sungai Bantaran";
+                        titikPantau = "Taman madiun";
+                    }
                 }
 
-                // Masukkan data hasil mapping lokal ke dalam baris tabel
+                // Masukkan data hasil mapping ke dalam baris tabel UI
                 tableModel.addRow(new Object[] {
                         "#" + l.getIdLaporan(),
                         namaPelapor,
