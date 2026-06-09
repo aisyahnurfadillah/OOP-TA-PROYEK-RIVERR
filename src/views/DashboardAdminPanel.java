@@ -60,19 +60,23 @@ public class DashboardAdminPanel extends JPanel implements Refreshable {
         lblSapa.setForeground(UIHelper.BIRU);
         header.add(lblSapa, BorderLayout.WEST);
         
+        // tambahan UAS: Tombol Filter
+        JPanel panelTombol = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        panelTombol.setOpaque(false);
+        JButton btnFilter = UIHelper.buatTombolOutline("Filter Prioritas", java.awt.Color.RED);
+        btnFilter.addActionListener(e -> loadDataPrioritas());
+        panelTombol.add(btnFilter);
+
         // Tombol Logout
         JButton btnLogout = UIHelper.buatTombolOutline("Logout", UIHelper.MERAH);
         btnLogout.addActionListener(e -> {
             SessionManager.logout();
             frame.showPanel(MainFrame.LOGIN);
         });
-        header.add(btnLogout, BorderLayout.EAST);
+        panelTombol.add(btnLogout);
 
-        // tambahan UAS: Tombol Filter
-        JButton btnFilter = UIHelper.buatTombolOutline("🔥 Filter Prioritas", java.awt.Color.RED);
-        btnFilter.addActionListener(e -> loadDataPrioritas());
-        header.add(btnFilter, BorderLayout.CENTER); // Menambahkan di tengah header
 
+        header.add(panelTombol, BorderLayout.EAST);
         add(header, BorderLayout.NORTH);
         
 
