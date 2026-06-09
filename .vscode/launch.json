@@ -6,6 +6,13 @@
       "name": "Main",
       "request": "launch",
       "mainClass": "Main",
+      "projectName": "OOP-TA-PROYEK-RIVERR_66420e47"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Main",
       "projectName": "OOP-TA-PROYEK-RIVERR_50dc38bb"
     },
     {
